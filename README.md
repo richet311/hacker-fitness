@@ -13,6 +13,41 @@ A comprehensive fitness tracking application with AI-powered personalized meal p
 📈 **Metrics Tracking**: Track age, weight, height, activity level, and fitness goals
 🆓 **100% Free**: No API costs - uses Hugging Face's free tier with fallback calculations
 
+## Environment Variables
+
+Create a `.env.local` file in the root directory with the following variables:
+
+```bash
+# Clerk Authentication (Required)
+# Get these from https://dashboard.clerk.com/last-active?path=api-keys
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_actual_publishable_key_here
+CLERK_SECRET_KEY=sk_test_your_actual_secret_key_here
+
+# Database (Required)
+DATABASE_URL=postgresql://username:password@host:port/database?sslmode=require
+
+# Google Gemini API (Optional - for AI meal planning)
+GOOGLE_GEMINI_API_KEY=your_gemini_api_key_here
+
+# Next.js (Optional)
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_nextauth_secret_here
+```
+
+**Important**: Make sure your Clerk keys are valid and properly formatted. Invalid keys will cause build failures.
+
+### Fixing Invalid Clerk Keys
+
+If you encounter the error `The publishableKey passed to Clerk is invalid`, follow these steps:
+
+1. Go to [Clerk Dashboard](https://dashboard.clerk.com/last-active?path=api-keys)
+2. Copy your **Publishable Key** (starts with `pk_test_` or `pk_live_`)
+3. Copy your **Secret Key** (starts with `sk_test_` or `sk_live_`)
+4. Update your `.env.local` file with the correct keys
+5. Restart your development server
+
+**Note**: Keys should not be base64 encoded or contain special characters that might cause corruption.
+
 ## Tech Stack
 
 - **Framework**: Next.js 15 with App Router
