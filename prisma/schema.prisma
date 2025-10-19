@@ -1,0 +1,180 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User profile table - links to Clerk user ID
+model User {
+  id                String   @id @default(cuid())
+  clerkId           String   @unique // Clerk user ID
+  email             String   @unique
+  firstName         String?
+  lastName          String?
+  profileImageUrl   String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  profile           UserProfile?
+  workouts          Workout[]
+  nutritionEntries  NutritionEntry[]
+  goals             Goal[]
+  achievements      Achievement[]
+
+  @@map("users")
+}
+
+// User profile with fitness metrics and preferences
+model UserProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Basic metrics
+  feetHeight    Float?   // in feet
+  inchesHeight  Float?   // in inches
+  weight        Float?   // in lbs
+  age           Int?
+  sex           String?  // "male", "female", "other"
+  activityLevel String?  // "light", "moderate", "active", "very_active"
+  
+  // Fitness goals
+  primaryGoal   String?  // "weight_loss", "lose_body_fat", "muscle_gain", "maintenance", "endurance"
+  targetWeight  Float?
+  targetDate    DateTime?
+  
+  // Preferences
+  units         String   @default("imperial") 
+  notifications Boolean  @default(true)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("user_profiles")
+}
+
+// Workout tracking
+model Workout {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name        String
+  type        String   // "cardio", "strength", "flexibility", "sports"
+  duration    Int      // in minutes
+  caloriesBurned Int?
+  notes       String?
+  date        DateTime @default(now())
+  completed   Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  exercises   Exercise[]
+
+  @@map("workouts")
+}
+
+// Individual exercises within workouts
+model Exercise {
+  id          String   @id @default(cuid())
+  workoutId   String
+  workout     Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+
+  name        String
+  category    String   // "chest", "back", "legs", "shoulders", "arms", "core", "cardio"
+  sets        Int?
+  reps        Int?
+  weight      Float?   // in lbs
+  duration    Int?     // in seconds for time-based exercises
+  distance    Float?   // in mi for cardio
+  restTime    Int?     // in seconds
+  notes       String?
+
+  @@map("exercises")
+}
+
+// Exercises within workout plans
+model WorkoutPlanExercise {
+  id            String       @id @default(cuid())
+  workoutPlanId String
+
+  name          String
+  category      String
+  sets          Int
+  reps          Int?
+  weight        Float?
+  duration      Int?
+  restTime      Int?
+  notes         String?
+  order         Int          // for ordering exercises in the plan
+
+  @@map("workout_plan_exercises")
+}
+
+// Nutrition tracking
+model NutritionEntry {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  foodName    String
+  calories    Int
+  protein     Float?   // in grams
+  carbs       Float?   // in grams
+  fat         Float?   // in grams
+  unit        String?  // "grams""
+  date        DateTime @default(now())
+  notes       String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("nutrition_entries")
+}
+
+
+// Goal setting and tracking
+model Goal {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String?
+  type        String   // "weight", "strength", "endurance", "nutrition", "general"
+  targetValue Float?
+  currentValue Float?
+  unit        String?  // "lbs", "minutes", "days", etc.
+  targetDate  DateTime
+  isCompleted Boolean  @default(false)
+  completedAt DateTime?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("goals")
+}
+
+// Achievements and milestones
+model Achievement {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String
+  type        String   // "streak", "milestone", "challenge", "personal_best"
+  icon        String?  // emoji or icon name
+  earnedAt    DateTime @default(now())
+
+  @@map("achievements")
+}
