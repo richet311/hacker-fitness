@@ -700,7 +700,7 @@ const Timeline = () => {
                                 <Button
                                   size="sm"
                                   variant="outline" 
-                                  className="w-full text-xs h-10 px-3 cursor-pointer flex items-center justify-center"
+                                  className="w-full text-sm h-12 px-4 cursor-pointer flex items-center justify-center"
                                   onClick={() => openWorkoutDialog(day)}
                                 >
                                   {day.workouts && day.workouts.length > 0 ? 'View Workouts' : 'Add Workout'}
