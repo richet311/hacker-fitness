@@ -74,7 +74,7 @@ function HomeContent() {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink href="/macro-meals" className="px-4 py-2">
-                  Macro Tips
+                  Macro and Meals
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
