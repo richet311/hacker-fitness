@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { clerkId, name, type, duration, caloriesBurned, notes, date, exercises, completed } = body;
+    const { clerkId, name, type, duration, caloriesBurned, notes, date, exercises } = body;
 
     console.log('POST /api/workouts - Request body:', body);
 
@@ -153,7 +153,7 @@ export async function DELETE(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { workoutId, name, type, duration, caloriesBurned, notes, exercises, completed } = body;
+    const { workoutId, name, type, duration, caloriesBurned, notes, exercises } = body;
 
     if (!workoutId) {
       return NextResponse.json({ error: 'Workout ID is required' }, { status: 400 });
