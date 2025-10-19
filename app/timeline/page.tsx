@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import Header from "@/components/header";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -67,7 +68,8 @@ const MUSCLE_GROUPS = [
 ];
 
 const Timeline = () => {
-  const { user } = useUser();
+  const { user, isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [weekPlan, setWeekPlan] = useState<DayPlan[]>([]);
   const [currentWeek, setCurrentWeek] = useState(new Date());
@@ -86,6 +88,13 @@ const Timeline = () => {
   });
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+
+  // Check authentication and redirect if needed
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/?auth-required=true');
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   const generateWeeklyPlan = useCallback(() => {
     const startOfWeek = new Date(currentWeek);
@@ -397,7 +406,8 @@ const Timeline = () => {
     return "bg-blue-100 text-blue-700 border-blue-300";
   };
 
-  if (loading) {
+  // Show loading while checking authentication
+  if (!isLoaded || loading) {
     return (
       <>
         <Header />
@@ -409,6 +419,11 @@ const Timeline = () => {
         </div>
       </>
     );
+  }
+
+  // Don't render anything if not signed in (will redirect)
+  if (!isSignedIn) {
+    return null;
   }
 
   return (
@@ -685,7 +700,7 @@ const Timeline = () => {
                                 <Button
                                   size="sm"
                                   variant="outline" 
-                                  className="w-full text-xs h-9 px-2 cursor-pointer"
+                                  className="w-full text-xs h-10 px-3 cursor-pointer flex items-center justify-center"
                                   onClick={() => openWorkoutDialog(day)}
                                 >
                                   {day.workouts && day.workouts.length > 0 ? 'View Workouts' : 'Add Workout'}

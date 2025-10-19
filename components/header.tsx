@@ -49,7 +49,7 @@ export default function Header() {
             <NavigationMenuItem>
               <Link href="/timeline" passHref legacyBehavior>
                 <NavigationMenuLink className="px-4 py-2 cursor-pointer">
-                  Timeline
+                  Workout Plan
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import Header from "@/components/header";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -69,7 +70,8 @@ type WorkoutPlan = {
 
 
 const MacroTips = () => {
-  const { user } = useUser();
+  const { user, isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
   const [userMetrics, setUserMetrics] = useState<UserMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -104,6 +106,13 @@ const MacroTips = () => {
   
   // Memoize userMetrics to prevent unnecessary re-renders
   const memoizedUserMetrics = useMemo(() => userMetrics, [userMetrics]);
+
+  // Check authentication and redirect if needed
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/?auth-required=true');
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   // Use local date-only (YYYY-MM-DD) to avoid timezone shifts from toISOString()
   const formatISODateLocal = (d: Date) => {
@@ -816,7 +825,8 @@ const MacroTips = () => {
     return level.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
   };
 
-  if (loading) {
+  // Show loading while checking authentication
+  if (!isLoaded || loading) {
     return (
       <>
         <Header />
@@ -825,9 +835,14 @@ const MacroTips = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
             <p className="text-muted-foreground">Loading your meal plan...</p>
           </div>
-      </div>
+        </div>
       </>
     );
+  }
+
+  // Don't render anything if not signed in (will redirect)
+  if (!isSignedIn) {
+    return null;
   }
 
   if (!userMetrics) {

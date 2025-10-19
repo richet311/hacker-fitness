@@ -79,7 +79,7 @@ function HomeContent() {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuLink href="/timeline" className="px-4 py-2">
-                  Timeline
+                  Workout Plan
                 </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
