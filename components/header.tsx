@@ -33,19 +33,25 @@ export default function Header() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink href="/" className="px-4 py-2 cursor-pointer">
-                Home
-              </NavigationMenuLink>
+              <Link href="/" passHref legacyBehavior>
+                <NavigationMenuLink className="px-4 py-2 cursor-pointer">
+                  Home
+                </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink href="/macro-meals" className="px-4 py-2 cursor-pointer">
-                Macro and Meals
-              </NavigationMenuLink>
+              <Link href="/macro-meals" passHref legacyBehavior>
+                <NavigationMenuLink className="px-4 py-2 cursor-pointer">
+                  Macro and Meals
+                </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink href="/timeline" className="px-4 py-2 cursor-pointer">
-                Timeline
-              </NavigationMenuLink>
+              <Link href="/timeline" passHref legacyBehavior>
+                <NavigationMenuLink className="px-4 py-2 cursor-pointer">
+                  Timeline
+                </NavigationMenuLink>
+              </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

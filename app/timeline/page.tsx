@@ -208,43 +208,6 @@ const Timeline = () => {
     }, 150);
   };
 
-  const refreshWorkouts = async () => {
-    if (!user) return;
-    
-    try {
-      const startOfWeek = new Date(currentWeek);
-      startOfWeek.setDate(currentWeek.getDate() - currentWeek.getDay());
-      
-      const endOfWeek = new Date(startOfWeek);
-      endOfWeek.setDate(startOfWeek.getDate() + 6);
-      endOfWeek.setHours(23, 59, 59, 999);
-
-      const response = await fetch(
-        `/api/workouts?clerkId=${user.id}&startDate=${startOfWeek.toISOString()}&endDate=${endOfWeek.toISOString()}`
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Refreshed workouts data:', data);
-        
-        // Update the current week plan with fresh data from database
-        setWeekPlan(prev => prev.map(day => {
-          const dayWorkouts = data.workouts.filter((w: Workout) => {
-            const workoutDate = new Date(w.date).toISOString().split('T')[0];
-            return workoutDate === day.date;
-          });
-          
-          return {
-            ...day,
-            workouts: dayWorkouts
-          };
-        }));
-      }
-    } catch (error) {
-      console.error("Error refreshing workouts:", error);
-    }
-  };
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });

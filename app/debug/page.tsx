@@ -1,14 +1,15 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
 
 export default function DebugPage() {
   const { user, isLoaded, isSignedIn } = useUser();
   const [debugData, setDebugData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchDebugData = async () => {
+  const fetchDebugData = useCallback(async () => {
     if (!user) return;
     
     setLoading(true);
@@ -21,13 +22,13 @@ export default function DebugPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     if (user) {
       fetchDebugData();
     }
-  }, [user]);
+  }, [user, fetchDebugData]);
 
   if (!isLoaded) {
     return <div>Loading...</div>;
@@ -68,15 +69,15 @@ export default function DebugPage() {
         <div className="bg-green-100 p-4 rounded">
           <h2 className="text-lg font-semibold mb-2">Quick Actions</h2>
           <div className="space-x-4">
-            <a href="/metrics" className="bg-green-500 text-white px-4 py-2 rounded">
+            <Link href="/metrics" className="bg-green-500 text-white px-4 py-2 rounded inline-block">
               Go to Metrics
-            </a>
-            <a href="/personalized-plan" className="bg-green-500 text-white px-4 py-2 rounded">
+            </Link>
+            <Link href="/personalized-plan" className="bg-green-500 text-white px-4 py-2 rounded inline-block">
               Go to Dashboard
-            </a>
-            <a href="/" className="bg-green-500 text-white px-4 py-2 rounded">
+            </Link>
+            <Link href="/" className="bg-green-500 text-white px-4 py-2 rounded inline-block">
               Go to Home
-            </a>
+            </Link>
           </div>
         </div>
       </div>

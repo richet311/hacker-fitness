@@ -20,9 +20,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
-export default function Home() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const { isSignedIn } = useUser();
   const [showAuthAlert, setShowAuthAlert] = useState(false);
@@ -173,3 +173,10 @@ export default function Home() {
   );
 }
 
+export default function Home() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeContent />
+    </Suspense>
+  );
+}
