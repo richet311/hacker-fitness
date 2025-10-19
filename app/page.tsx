@@ -160,12 +160,12 @@ function HomeContent() {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold mb-8 text-center">Why Us?</h2>
           <p className="text-lg text-muted-foreground text-center">
-            Gaze for the Gains is your all-in-one fitness companion designed to help you achieve your health 
+            HackerFitness is your all-in-one fitness companion designed to help you achieve your health 
             and fitness goals through intelligent tracking and personalized planning.
             Whether you are just starting your fitness journey or you are a seasoned athlete,
             our platform provides the tools you need to stay consistent, track progress, and reach new milestones.
             Our Mission: To empower individuals to take control of their health by making fitness tracking simple, 
-            intuitive, and motivating. We believe that when you keep your gaze on your gains, success follows.
+            intuitive, and motivating. We believe that when you hack into your fitness, success follows.
           </p>
         </div>
       </section>
